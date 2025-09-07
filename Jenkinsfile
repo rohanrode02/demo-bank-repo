@@ -18,13 +18,13 @@ pipeline {
             }
         }
         stage('SonarQube Analysis') {
-            environment {
-                SONAR_TOKEN = credentials('sonarqube-token') // Jenkins credentials मध्ये token
-            }
             steps {
-                sh "mvn sonar:sonar -Dsonar.projectKey=banking-system -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN"
+                withSonarQubeEnv('SonarQube') {
+                    bat "mvn sonar:sonar -Dsonar.projectKey=banking-system -Dsonar.login=${env.SONAR_TOKEN}"
+                }
             }
         }
+
         stage('Deploy to Tomcat') {
             steps {
                 // WAR deploy करण्यासाठी Jenkins plugin वापरू शकतो
