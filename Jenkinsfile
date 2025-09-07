@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 // WAR deploy करण्यासाठी Jenkins plugin वापरू शकतो
-                deploy adapters: [tomcat9(credentialsId: 'tomcat-admin', path: '', url: 'http://localhost:8091')], 
+                deploy adapters: [tomcat9(credentialsId: 'b71d27a6-fb53-485b-8ba8-9eae730abc0b', path: '', url: 'http://localhost:8091')], 
                        contextPath: '/banking-system', 
                        war: '**/target/banking-system.war'
             }
