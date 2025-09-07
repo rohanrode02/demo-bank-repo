@@ -20,10 +20,12 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    bat "mvn sonar:sonar -Dsonar.projectKey=banking-system -Dsonar.login=${env.SONAR_TOKEN}"
-                }
+                sh 'mvn sonar:sonar -Dsonar.projectKey=banking-system -Dsonar.login=${SONAR_AUTH_TOKEN}'
+            }
+
             }
         }
+        
 
         stage('Deploy to Tomcat') {
             steps {
