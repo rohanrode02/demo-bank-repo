@@ -1,0 +1,49 @@
+<web-app xmlns="http://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://jakarta.ee/xml/ns/jakartaee
+                             http://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <servlet>
+        <servlet-name>RegisterCustomerServlet</servlet-name>
+        <servlet-class>com.mybank.servlets.RegisterCustomerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterCustomerServlet</servlet-name>
+        <url-pattern>/RegisterCustomerServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>OpenAccountServlet</servlet-name>
+        <servlet-class>com.mybank.servlets.OpenAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OpenAccountServlet</servlet-name>
+        <url-pattern>/OpenAccountServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TransactionServlet</servlet-name>
+        <servlet-class>com.mybank.servlets.TransactionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TransactionServlet</servlet-name>
+        <url-pattern>/TransactionServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ******** DBTestServlet Add करा ******** -->
+    <servlet>
+        <servlet-name>DBTestServlet</servlet-name>
+        <servlet-class>com.mybank.servlets.DBTestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DBTestServlet</servlet-name>
+        <url-pattern>/DBTestServlet</url-pattern>
+    </servlet-mapping>
+    <!-- *************************************** -->
+
+    <welcome-file-list>
+        <welcome-file>register.jsp</welcome-file>
+    </welcome-file-list>
+    
+</web-app>

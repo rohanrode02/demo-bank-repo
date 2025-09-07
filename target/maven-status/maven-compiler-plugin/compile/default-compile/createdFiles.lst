@@ -1,0 +1,4 @@
+com\mybank\servlets\DBTestServlet.class
+com\mybank\servlets\OpenAccountServlet.class
+com\mybank\servlets\RegisterCustomerServlet.class
+com\mybank\servlets\TransactionServlet.class
