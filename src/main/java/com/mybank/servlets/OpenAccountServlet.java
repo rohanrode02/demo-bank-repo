@@ -17,7 +17,7 @@ public class OpenAccountServlet extends HttpServlet {
         AccountDAO dao = new AccountDAO();
         int accountId = dao.openAccount(acc);
         if (accountId > 0) {
-            response.sendRedirect(request.getContextPath() + "/ViewAccount.jsp?accountId=" + accountId);
+            response.sendRedirect(request.getContextPath() + "/viewAccount.jsp?accountId=" + accountId);
         } else {
             response.getWriter().println("Failed to open account.");
         }
