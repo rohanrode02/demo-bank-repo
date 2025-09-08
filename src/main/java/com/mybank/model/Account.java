@@ -15,12 +15,7 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(int customerId, String accountType, double balance) {
-        this.customerId = customerId;
-        this.accountType = accountType;
-        this.balance = balance;
-    }
-
+    // getters/setters
     public int getAccountId() { return accountId; }
     public void setAccountId(int accountId) { this.accountId = accountId; }
     public int getCustomerId() { return customerId; }

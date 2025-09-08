@@ -1,24 +1,33 @@
 package com.mybank.servlets;
 
-import com.mybank.dao.CustomerDAO;
-import com.mybank.model.Customer;
+import com.mybank.service.CustomerService;
 
-import javax.servlet.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
+@WebServlet("/RegisterCustomerServlet")
 public class RegisterCustomerServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    private CustomerService service = new CustomerService();
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String fullname = request.getParameter("fullname");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
 
-        Customer c = new Customer(fullname, email, phone);
-        CustomerDAO dao = new CustomerDAO();
-        int id = dao.registerCustomer(c);
-        if (id > 0) {
-            response.sendRedirect(request.getContextPath() + "/register.jsp?success=true&customerId=" + id);
-        } else {
+        try {
+            int id = service.registerCustomer(fullname, email, phone);
+            if (id > 0) {
+                response.sendRedirect(request.getContextPath() + "/register.jsp?success=true&customerId=" + id);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/register.jsp?error=true");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/register.jsp?error=true");
         }
     }

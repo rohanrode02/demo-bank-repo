@@ -1,28 +1,28 @@
 package com.mybank.model;
 
 public class Customer {
-    private int customerId;
+    private int id;
     private String fullname;
     private String email;
     private String phone;
 
     public Customer() {}
 
-    public Customer(int customerId, String fullname, String email, String phone) {
-        this.customerId = customerId;
+    public Customer(int id, String fullname, String email, String phone) {
+        this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;
     }
-
     public Customer(String fullname, String email, String phone) {
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;
     }
 
-    public int getCustomerId() { return customerId; }
-    public void setCustomerId(int customerId) { this.customerId = customerId; }
+    // getters / setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public String getFullname() { return fullname; }
     public void setFullname(String fullname) { this.fullname = fullname; }
     public String getEmail() { return email; }

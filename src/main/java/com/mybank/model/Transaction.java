@@ -1,39 +1,33 @@
 package com.mybank.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Transaction {
-    private int transactionId;
+    private int id;
     private int accountId;
-    private String type;
+    private String transactionType;
     private double amount;
-    private Date date;
+    private Timestamp transactionDate;
 
-    // ✅ Default constructor (JPA / frameworks साठी गरजेचं)
     public Transaction() {}
 
-    // ✅ Parameterized constructor (DAO साठी use करायला सोपं)
-    public Transaction(int transactionId, int accountId, String type, double amount, Date date) {
-        this.transactionId = transactionId;
+    public Transaction(int id, int accountId, String transactionType, double amount, Timestamp transactionDate) {
+        this.id = id;
         this.accountId = accountId;
-        this.type = type;
+        this.transactionType = transactionType;
         this.amount = amount;
-        this.date = date;
+        this.transactionDate = transactionDate;
     }
 
-    // Getters & Setters
-    public int getTransactionId() { return transactionId; }
-    public void setTransactionId(int transactionId) { this.transactionId = transactionId; }
-
+    // getters/setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public int getAccountId() { return accountId; }
     public void setAccountId(int accountId) { this.accountId = accountId; }
-
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-
+    public String getTransactionType() { return transactionType; }
+    public void setTransactionType(String transactionType) { this.transactionType = transactionType; }
     public double getAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
-
-    public Date getDate() { return date; }
-    public void setDate(Date date) { this.date = date; }
+    public Timestamp getTransactionDate() { return transactionDate; }
+    public void setTransactionDate(Timestamp transactionDate) { this.transactionDate = transactionDate; }
 }

@@ -2,19 +2,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>veiw Account</title>
-    <link rel="stylesheet" href="style.css">
+    <title>View Account</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<h2>View Account</h2>
-
-<form action="ViewAccountServlet" method="get">
-    <label>Account ID:</label>
-    <input type="number" name="accountId" required />
-    <input type="submit" value="View Account Details" />
-</form>
-
-
-<a href="register.jsp">Register Customer</a> | <a href="transactions.jsp">Transactions</a>
+    <div class="container">
+        <h2>View Account</h2>
+        <form action="ViewAccountServlet" method="get">
+            <label>Account ID:</label>
+            <input type="number" name="accountId" required />
+            <input type="submit" value="View Account Details" />
+        </form>
+        <br/>
+        <a href="register.jsp">Register Customer</a> | <a href="transactions.jsp">Transactions</a>
+    </div>
 </body>
 </html>
