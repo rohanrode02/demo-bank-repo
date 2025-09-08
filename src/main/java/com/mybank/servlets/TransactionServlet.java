@@ -1,10 +1,9 @@
 package com.mybank.servlets;
 
 import java.io.IOException;
-import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import com.mybank.util.DBConnection; // ✅ utility import
+import com.mybank.dao.TransactionDAO;
 
 public class TransactionServlet extends HttpServlet {
 
@@ -16,20 +15,13 @@ public class TransactionServlet extends HttpServlet {
         String type = request.getParameter("transactionType");
         double amount = Double.parseDouble(request.getParameter("amount"));
 
+        TransactionDAO dao = new TransactionDAO();
         response.setContentType("text/html");
 
-        try (Connection con = DBConnection.getConnection()) { // ✅ utility वापर
-            double balance = 0;
+        try {
+            double balance = dao.getBalance(accountId);
 
-            PreparedStatement psBalance = con.prepareStatement(
-                "SELECT balance FROM accounts WHERE account_id = ?"
-            );
-            psBalance.setInt(1, accountId);
-            ResultSet rs = psBalance.executeQuery();
-
-            if (rs.next()) {
-                balance = rs.getDouble("balance");
-            } else {
+            if (balance == -1) {
                 response.getWriter().println("Account not found!");
                 return;
             }
@@ -43,22 +35,14 @@ public class TransactionServlet extends HttpServlet {
                                 ? balance + amount 
                                 : balance - amount;
 
-            PreparedStatement psUpdate = con.prepareStatement(
-                "UPDATE accounts SET balance=? WHERE account_id=?"
-            );
-            psUpdate.setDouble(1, newBalance);
-            psUpdate.setInt(2, accountId);
-            psUpdate.executeUpdate();
+            boolean updated = dao.updateBalance(accountId, newBalance);
+            boolean inserted = dao.insertTransaction(accountId, type, amount);
 
-            PreparedStatement psInsert = con.prepareStatement(
-                "INSERT INTO transactions(account_id, transaction_type, amount) VALUES(?,?,?)"
-            );
-            psInsert.setInt(1, accountId);
-            psInsert.setString(2, type);
-            psInsert.setDouble(3, amount);
-            psInsert.executeUpdate();
-
-            response.getWriter().println("Transaction Successful! New Balance: " + newBalance);
+            if (updated && inserted) {
+                response.getWriter().println("Transaction Successful! New Balance: " + newBalance);
+            } else {
+                response.getWriter().println("Transaction Failed!");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

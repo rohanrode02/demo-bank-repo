@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Open Account</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h2>Open Account</h2>

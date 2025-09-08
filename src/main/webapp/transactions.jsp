@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Transaction</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h2>Perform Transaction</h2>
