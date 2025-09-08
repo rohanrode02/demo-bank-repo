@@ -31,6 +31,6 @@ public class ViewAccountServlet extends HttpServlet {
         request.setAttribute("transactions", transactions);
 
         // JSP मध्ये पहा (accountDetails.jsp)
-        request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
+        request.getRequestDispatcher("/ViewAccountDetails.jsp").forward(request, response);
     }
 }
