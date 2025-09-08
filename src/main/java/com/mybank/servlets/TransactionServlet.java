@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import com.mybank.util.DBConnection; // ✅ utility import
 
 public class TransactionServlet extends HttpServlet {
 
@@ -17,15 +18,9 @@ public class TransactionServlet extends HttpServlet {
 
         response.setContentType("text/html");
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb?useSSL=false&serverTimezone=UTC",
-                "root", "root"
-            );
-
-            // ✅ balance safely fetch करा
+        try (Connection con = DBConnection.getConnection()) { // ✅ utility वापर
             double balance = 0;
+
             PreparedStatement psBalance = con.prepareStatement(
                 "SELECT balance FROM accounts WHERE account_id = ?"
             );
@@ -36,23 +31,18 @@ public class TransactionServlet extends HttpServlet {
                 balance = rs.getDouble("balance");
             } else {
                 response.getWriter().println("Account not found!");
-                con.close();
                 return;
             }
 
-            // ✅ withdraw चेक
             if ("Withdraw".equalsIgnoreCase(type) && amount > balance) {
                 response.getWriter().println("Insufficient Balance!");
-                con.close();
                 return;
             }
 
-            // ✅ नवीन balance काढा
             double newBalance = type.equalsIgnoreCase("Deposit") 
                                 ? balance + amount 
                                 : balance - amount;
 
-            // ✅ accounts टेबल update
             PreparedStatement psUpdate = con.prepareStatement(
                 "UPDATE accounts SET balance=? WHERE account_id=?"
             );
@@ -60,7 +50,6 @@ public class TransactionServlet extends HttpServlet {
             psUpdate.setInt(2, accountId);
             psUpdate.executeUpdate();
 
-            // ✅ transaction history मध्ये insert
             PreparedStatement psInsert = con.prepareStatement(
                 "INSERT INTO transactions(account_id, transaction_type, amount) VALUES(?,?,?)"
             );
@@ -68,8 +57,6 @@ public class TransactionServlet extends HttpServlet {
             psInsert.setString(2, type);
             psInsert.setDouble(3, amount);
             psInsert.executeUpdate();
-
-            con.close();
 
             response.getWriter().println("Transaction Successful! New Balance: " + newBalance);
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import com.mybank.util.DBConnection; // ✅ utility import
 
 public class RegisterCustomerServlet extends HttpServlet {
 
@@ -15,13 +16,7 @@ public class RegisterCustomerServlet extends HttpServlet {
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb?useSSL=false&serverTimezone=UTC",
-                "root", "root"
-            );
-
+        try (Connection con = DBConnection.getConnection()) { // ✅ utility वापर
             PreparedStatement ps = con.prepareStatement(
                 "INSERT INTO customers(fullname,email,phone) VALUES(?,?,?)"
             );
@@ -30,15 +25,12 @@ public class RegisterCustomerServlet extends HttpServlet {
             ps.setString(3, phone);
 
             int rows = ps.executeUpdate();
-            con.close();
 
             if (rows > 0) {
-                // यशस्वी नोंदणी झाल्यावर register.jsp वर redirect
                 response.sendRedirect(request.getContextPath() + "/register.jsp?success=true");
             } else {
                 response.sendRedirect(request.getContextPath() + "/register.jsp?error=true");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/register.jsp?error=true");
