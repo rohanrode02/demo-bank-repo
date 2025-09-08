@@ -1,7 +1,10 @@
 package com.mybank.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import com.mybank.util.DBConnection;
+import com.mybank.model.Transaction;
 
 public class TransactionDAO {
 
@@ -30,15 +33,37 @@ public class TransactionDAO {
         }
     }
 
-    public boolean insertTransaction(int accountId, String type, double amount) throws SQLException {
-        String sql = "INSERT INTO transactions(account_id, transaction_type, amount) VALUES(?,?,?)";
+    public boolean insertTransaction(Transaction transaction) throws SQLException {
+        String sql = "INSERT INTO transactions(account_id, transaction_type, amount, transaction_date) VALUES(?,?,?,NOW())";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, accountId);
-            ps.setString(2, type);
-            ps.setDouble(3, amount);
+            ps.setInt(1, transaction.getAccountId());
+            ps.setString(2, transaction.getType());
+            ps.setDouble(3, transaction.getAmount());
             return ps.executeUpdate() > 0;
         }
+    }
+
+    public List<Transaction> getTransactionHistory(int accountId) throws SQLException {
+        List<Transaction> list = new ArrayList<>();
+        String sql = "SELECT * FROM transactions WHERE account_id=? ORDER BY transaction_date DESC";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Transaction t = new Transaction();
+                t.setTransactionId(rs.getInt("transaction_id"));
+                t.setAccountId(rs.getInt("account_id"));
+                t.setType(rs.getString("transaction_type"));
+                t.setAmount(rs.getDouble("amount"));
+                t.setDate(rs.getTimestamp("transaction_date"));
+                list.add(t);
+            }
+        }
+        return list;
     }
 }

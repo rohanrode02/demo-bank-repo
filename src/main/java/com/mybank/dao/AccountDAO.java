@@ -1,105 +1,132 @@
 package com.mybank.dao;
 
+import com.mybank.model.Account;
+import com.mybank.model.Transaction;
+import com.mybank.util.DBConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.mybank.util.DBConnection;
 
 public class AccountDAO {
 
-    // Existing method
-    public boolean openAccount(int customerId, String accountType, double deposit) {
+    // Open account and return generated account_id (or -1 on failure)
+    public int openAccount(Account account) {
         String sql = "INSERT INTO accounts(customer_id, account_type, balance) VALUES(?,?,?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, customerId);
-            ps.setString(2, accountType);
-            ps.setDouble(3, deposit);
-
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // ===== New methods =====
-
-    // AccountDetails DTO
-    public static class AccountDetails {
-        private int accountId;
-        private String accountType;
-        private double balance;
-
-        public AccountDetails(int accountId, String accountType, double balance) {
-            this.accountId = accountId;
-            this.accountType = accountType;
-            this.balance = balance;
-        }
-
-        public int getAccountId() { return accountId; }
-        public String getAccountType() { return accountType; }
-        public double getBalance() { return balance; }
-    }
-
-    // Transaction DTO
-    public static class Transaction {
-        private String type;
-        private double amount;
-        private Timestamp date;
-
-        public Transaction(String type, double amount, Timestamp date) {
-            this.type = type;
-            this.amount = amount;
-            this.date = date;
-        }
-
-        public String getType() { return type; }
-        public double getAmount() { return amount; }
-        public Timestamp getDate() { return date; }
-    }
-
-    // Get account info
-    public AccountDetails getAccountDetails(int accountId) {
-        AccountDetails account = null;
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                     "SELECT * FROM accounts WHERE account_id=?")) {
-            ps.setInt(1, accountId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                account = new AccountDetails(
-                        rs.getInt("account_id"),
-                        rs.getString("account_type"),
-                        rs.getDouble("balance")
-                );
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, account.getCustomerId());
+            ps.setString(2, account.getAccountType());
+            ps.setDouble(3, account.getBalance());
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        return keys.getInt(1);
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return account;
+        return -1;
+    }
+
+    // Get account details
+    public Account getAccountDetails(int accountId) {
+        String sql = "SELECT * FROM accounts WHERE account_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, accountId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Account(
+                        rs.getInt("account_id"),
+                        rs.getInt("customer_id"),
+                        rs.getString("account_type"),
+                        rs.getDouble("balance")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // Get transaction history
     public List<Transaction> getTransactionHistory(int accountId) {
-        List<Transaction> transactions = new ArrayList<>();
+        List<Transaction> list = new ArrayList<>();
+        String sql = "SELECT transaction_id, account_id, transaction_type, amount, transaction_date FROM transactions WHERE account_id = ? ORDER BY transaction_date DESC";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                     "SELECT transaction_type, amount, transaction_date FROM transactions WHERE account_id=? ORDER BY transaction_date DESC")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, accountId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                transactions.add(new Transaction(
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new Transaction(
+                        rs.getInt("transaction_id"),
+                        rs.getInt("account_id"),
                         rs.getString("transaction_type"),
                         rs.getDouble("amount"),
                         rs.getTimestamp("transaction_date")
-                ));
+                    ));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return transactions;
+        return list;
+    }
+
+    // perform transaction (deposit/withdraw) — returns new balance or Double.NaN on error
+    public double performTransaction(int accountId, String type, double amount) {
+        String selectSql = "SELECT balance FROM accounts WHERE account_id = ? FOR UPDATE"; // row lock
+        String updateSql = "UPDATE accounts SET balance = ? WHERE account_id = ?";
+        String insertTx = "INSERT INTO transactions(account_id, transaction_type, amount) VALUES(?,?,?)";
+
+        Connection con = null;
+        try {
+            con = DBConnection.getConnection();
+            con.setAutoCommit(false);
+
+            try (PreparedStatement ps1 = con.prepareStatement(selectSql)) {
+                ps1.setInt(1, accountId);
+                try (ResultSet rs = ps1.executeQuery()) {
+                    if (!rs.next()) {
+                        con.rollback();
+                        return Double.NaN;
+                    }
+                    double balance = rs.getDouble("balance");
+                    if ("Withdraw".equalsIgnoreCase(type) && amount > balance) {
+                        con.rollback();
+                        return Double.NaN; // insufficient funds
+                    }
+                    double newBalance = "Deposit".equalsIgnoreCase(type) ? balance + amount : balance - amount;
+
+                    try (PreparedStatement ps2 = con.prepareStatement(updateSql)) {
+                        ps2.setDouble(1, newBalance);
+                        ps2.setInt(2, accountId);
+                        ps2.executeUpdate();
+                    }
+
+                    try (PreparedStatement ps3 = con.prepareStatement(insertTx)) {
+                        ps3.setInt(1, accountId);
+                        ps3.setString(2, type);
+                        ps3.setDouble(3, amount);
+                        ps3.executeUpdate();
+                    }
+
+                    con.commit();
+                    return newBalance;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            try { if (con != null) con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            return Double.NaN;
+        } finally {
+            try { if (con != null) con.setAutoCommit(true); if (con != null) con.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
     }
 }

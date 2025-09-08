@@ -1,26 +1,29 @@
 package com.mybank.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.mybank.model.Customer;
 import com.mybank.util.DBConnection;
+
+import java.sql.*;
 
 public class CustomerDAO {
 
-    public boolean registerCustomer(String fullname, String email, String phone) {
-        String sql = "INSERT INTO customers(fullname,email,phone) VALUES(?,?,?)";
+    // register and return generated customerId or -1
+    public int registerCustomer(Customer c) {
+        String sql = "INSERT INTO customers(fullname, email, phone) VALUES(?,?,?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, fullname);
-            ps.setString(2, email);
-            ps.setString(3, phone);
-
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
+             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, c.getFullname());
+            ps.setString(2, c.getEmail());
+            ps.setString(3, c.getPhone());
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet keys = ps.getGeneratedKeys()) {
+                    if (keys.next()) return keys.getInt(1);
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+        return -1;
     }
 }
