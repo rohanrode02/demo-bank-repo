@@ -1,4 +1,20 @@
-@Override
+package com.mybank.servlets;
+
+import com.mybank.model.Account;
+import com.mybank.model.Transaction;
+import com.mybank.service.AccountService;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import javax.servlet.RequestDispatcher;
+import java.io.IOException;
+import java.util.List;
+
+public class ViewAccountServlet extends HttpServlet {
+
+    private AccountService accountService = new AccountService();
+
+    @Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
@@ -23,4 +39,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         request.setAttribute("error", e.getMessage());
         request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
     }
+}
+
+
 }
