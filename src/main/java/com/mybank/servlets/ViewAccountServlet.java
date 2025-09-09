@@ -19,7 +19,7 @@ public class ViewAccountServlet extends HttpServlet {
             throws ServletException, IOException {
         String sid = request.getParameter("accountId");
         if (sid == null || sid.isBlank()) {
-            request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
+            request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
             return;
         }
         try {
