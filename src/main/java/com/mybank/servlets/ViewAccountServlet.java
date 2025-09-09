@@ -18,19 +18,30 @@ public class ViewAccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String sid = request.getParameter("accountId");
+
         if (sid == null || sid.isBlank()) {
             request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
             return;
         }
+
         try {
             int accountId = Integer.parseInt(sid);
-            Account account = accountService.getAccount(accountId);
-            List<Transaction> transactions = accountService.getTransactionHistory(accountId);
+            System.out.println("Fetching account ID: " + accountId); // debug
 
-            request.setAttribute("account", account);
-            request.setAttribute("transactions", transactions);
+            Account account = accountService.getAccount(accountId);
+
+            if (account == null) {
+                System.out.println("Account not found in DB!"); // debug
+                request.setAttribute("error", "Account not found!");
+            } else {
+                List<Transaction> transactions = accountService.getTransactionHistory(accountId);
+                request.setAttribute("account", account);
+                request.setAttribute("transactions", transactions);
+            }
+
             RequestDispatcher rd = request.getRequestDispatcher("/accountDetails.jsp");
             rd.forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", e.getMessage());
