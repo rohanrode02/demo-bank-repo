@@ -46,11 +46,11 @@ public class ViewAccountServlet extends HttpServlet {
         } catch (NumberFormatException nfe) {
             System.out.println("Invalid accountId: " + sid);
             request.setAttribute("error", "Invalid Account ID");
-            request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
+            request.getRequestDispatcher("/viewAccount.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", e.getMessage());
-            request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
+            request.getRequestDispatcher("/viewAccount.jsp").forward(request, response);
         }
     }
 }
