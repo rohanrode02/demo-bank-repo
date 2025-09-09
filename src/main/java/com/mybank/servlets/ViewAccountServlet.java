@@ -17,35 +17,40 @@ public class ViewAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String sid = request.getParameter("accountId");
+        System.out.println("AccountId received in servlet: " + sid);
 
         if (sid == null || sid.isBlank()) {
-            request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
+            request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
             return;
         }
 
         try {
             int accountId = Integer.parseInt(sid);
-            System.out.println("Fetching account ID: " + accountId); // debug
-
             Account account = accountService.getAccount(accountId);
+            System.out.println("Account fetched: " + account);
 
-            if (account == null) {
-                System.out.println("Account not found in DB!"); // debug
-                request.setAttribute("error", "Account not found!");
-            } else {
-                List<Transaction> transactions = accountService.getTransactionHistory(accountId);
-                request.setAttribute("account", account);
-                request.setAttribute("transactions", transactions);
+            if(account == null){
+                System.out.println("Account is null for id: " + accountId);
             }
 
+            List<Transaction> transactions = accountService.getTransactionHistory(accountId);
+            System.out.println("Transactions fetched: " + (transactions != null ? transactions.size() : 0));
+
+            request.setAttribute("account", account);
+            request.setAttribute("transactions", transactions);
             RequestDispatcher rd = request.getRequestDispatcher("/accountDetails.jsp");
             rd.forward(request, response);
 
+        } catch (NumberFormatException nfe) {
+            System.out.println("Invalid accountId: " + sid);
+            request.setAttribute("error", "Invalid Account ID");
+            request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", e.getMessage());
-            request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
+            request.getRequestDispatcher("/ViewAccount.jsp").forward(request, response);
         }
     }
 }
