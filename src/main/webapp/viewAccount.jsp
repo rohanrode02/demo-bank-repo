@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>View Account</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
