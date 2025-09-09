@@ -1,4 +1,14 @@
-D:\demo-bank\src\main\java\com\mybank\servlets\DBTestServlet.java
-D:\demo-bank\src\main\java\com\mybank\servlets\RegisterCustomerServlet.java
-D:\demo-bank\src\main\java\com\mybank\servlets\OpenAccountServlet.java
+D:\demo-bank\src\main\java\com\mybank\service\AccountService.java
+D:\demo-bank\src\main\java\com\mybank\dao\AccountDAO.java
+D:\demo-bank\src\main\java\com\mybank\model\Transaction.java
+D:\demo-bank\src\main\java\com\mybank\servlets\ViewAccountServlet.java
+D:\demo-bank\src\main\java\com\mybank\dao\TransactionDAO.java
+D:\demo-bank\src\main\java\com\mybank\service\CustomerService.java
+D:\demo-bank\src\main\java\com\mybank\service\TransactionService.java
+D:\demo-bank\src\main\java\com\mybank\util\DBConnection.java
 D:\demo-bank\src\main\java\com\mybank\servlets\TransactionServlet.java
+D:\demo-bank\src\main\java\com\mybank\model\Customer.java
+D:\demo-bank\src\main\java\com\mybank\servlets\RegisterCustomerServlet.java
+D:\demo-bank\src\main\java\com\mybank\model\Account.java
+D:\demo-bank\src\main\java\com\mybank\servlets\OpenAccountServlet.java
+D:\demo-bank\src\main\java\com\mybank\dao\CustomerDAO.java

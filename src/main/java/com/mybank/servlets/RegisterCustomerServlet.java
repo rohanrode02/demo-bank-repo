@@ -3,11 +3,9 @@ package com.mybank.servlets;
 import com.mybank.service.CustomerService;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/RegisterCustomerServlet")
 public class RegisterCustomerServlet extends HttpServlet {
 
     private CustomerService service = new CustomerService();

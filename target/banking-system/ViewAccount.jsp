@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register Customer</title>
+    <title>View Account</title>
     <style>
         /* General Page Style */
 body {
@@ -73,22 +73,15 @@ a:hover {
     </style>
 </head>
 <body>
-<h2>Register Customer</h2>
-
-<!-- Success / Error message -->
-<% if("true".equals(request.getParameter("success"))) { %>
-    <p style="color:green;">Customer registered successfully!</p>
-<% } else if("true".equals(request.getParameter("error"))) { %>
-    <p style="color:red;">Error occurred. Try again.</p>
-<% } %>
-
-<form action="${pageContext.request.contextPath}/RegisterCustomerServlet" method="post">
-    Full Name: <input type="text" name="fullname" required><br>
-    Email: <input type="email" name="email" required><br>
-    Phone: <input type="text" name="phone" required><br>
-    <input type="submit" value="Register">
-</form>
-
-<a href="accounts.jsp">Open Account</a> | <a href="transactions.jsp">Transactions</a>
+    <div class="container">
+        <h2>View Account</h2>
+        <form action="ViewAccountServlet" method="get">
+            <label>Account ID:</label>
+            <input type="number" name="accountId" required />
+            <input type="submit" value="View Account Details" />
+        </form>
+        <br/>
+        <a href="register.jsp">Register Customer</a> | <a href="transactions.jsp">Transactions</a>
+    </div>
 </body>
 </html>

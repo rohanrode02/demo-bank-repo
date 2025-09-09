@@ -5,14 +5,13 @@ import com.mybank.model.Transaction;
 import com.mybank.service.AccountService;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ViewAccountServlet")
 public class ViewAccountServlet extends HttpServlet {
+
     private AccountService accountService = new AccountService();
 
     @Override
