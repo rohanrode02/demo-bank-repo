@@ -48,23 +48,25 @@ public class AccountDAO {
     }
 
     public List<Transaction> getTransactionHistory(int accountId) throws SQLException {
-        List<Transaction> list = new ArrayList<>();
-        String sql = "SELECT id, account_id, transaction_type, amount, transaction_date FROM transactions WHERE account_id=? ORDER BY transaction_date DESC";
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, accountId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    list.add(new Transaction(
-                        rs.getInt("id"),
-                        rs.getInt("account_id"),
-                        rs.getString("transaction_type"),
-                        rs.getDouble("amount"),
-                        rs.getTimestamp("transaction_date")
-                    ));
-                }
+    List<Transaction> list = new ArrayList<>();
+    String sql = "SELECT transaction_id, account_id, transaction_type, amount, transaction_date " +
+                 "FROM transactions WHERE account_id=? ORDER BY transaction_date DESC";
+    try (Connection con = DBConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, accountId);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(new Transaction(
+                    rs.getInt("transaction_id"),  // बदलले id → transaction_id
+                    rs.getInt("account_id"),
+                    rs.getString("transaction_type"),
+                    rs.getDouble("amount"),
+                    rs.getTimestamp("transaction_date")
+                ));
             }
         }
-        return list;
     }
+    return list;
+}
+
 }
