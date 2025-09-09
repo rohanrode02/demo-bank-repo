@@ -1,20 +1,4 @@
-package com.mybank.servlets;
-
-import com.mybank.model.Account;
-import com.mybank.model.Transaction;
-import com.mybank.service.AccountService;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
-import javax.servlet.RequestDispatcher;
-import java.io.IOException;
-import java.util.List;
-
-public class ViewAccountServlet extends HttpServlet {
-
-    private AccountService accountService = new AccountService();
-
-    @Override
+@Override
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
@@ -22,7 +6,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
     try {
         if (sid == null || sid.isBlank()) {
-            request.getRequestDispatcher("/viewAccount.jsp").forward(request, response);
+            request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
             return;
         }
 
@@ -37,8 +21,6 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     } catch (Exception e) {
         e.printStackTrace();
         request.setAttribute("error", e.getMessage());
-        request.getRequestDispatcher("/viewAccount.jsp").forward(request, response);
+        request.getRequestDispatcher("/accountDetails.jsp").forward(request, response);
     }
-}
-
 }
