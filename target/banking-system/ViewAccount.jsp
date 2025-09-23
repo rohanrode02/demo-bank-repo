@@ -1,87 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>View Account</title>
     <style>
-        /* General Page Style */
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-/* Heading */
-h2 {
-    color: #2c3e50;
-    margin-top: 30px;
-}
-
-/* Form Container */
-form {
-    background: #fff;
-    padding: 20px;
-    margin: 30px auto;
-    width: 350px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Inputs */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-select {
-    width: 90%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-/* Submit Button */
-input[type="submit"] {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 6px;
-    width: 100%;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #2980b9;
-}
-
-/* Links */
-a {
-    margin: 10px;
-    color: #3498db;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
+        body { font-family: Arial; text-align:center; background:#f4f7fb; }
+        h2 { margin-top:30px; color:#2c3e50; }
+        form { background:#fff; padding:20px; margin:30px auto; width:350px; border-radius:10px; }
+        input[type="number"], input[type="submit"] { width:90%; padding:10px; margin:10px 0; }
+        input[type="submit"] { background:#3498db; color:white; border:none; cursor:pointer; }
+        input[type="submit"]:hover { background:#2980b9; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>View Account</h2>
-        <form action="ViewAccountServlet" method="get">
-            <label>Account ID:</label>
-            <input type="number" name="accountId" required />
-            <input type="submit" value="View Account Details" />
-        </form>
-        <br/>
-        <a href="register.jsp">Register Customer</a> | <a href="transactions.jsp">Transactions</a>
-    </div>
+    <h2>View Account</h2>
+    <form action="ViewAccountServlet" method="get">
+        <label>Account ID:</label><br/>
+        <input type="number" name="accountId" required/><br/>
+        <input type="submit" value="View Details"/>
+    </form>
+    <%
+        String error = (String) request.getAttribute("error");
+        if(error != null){
+    %>
+        <p style="color:red;"><%= error %></p>
+    <%
+        }
+    %>
 </body>
 </html>

@@ -15,15 +15,19 @@ public class RegisterCustomerServlet extends HttpServlet {
             throws ServletException, IOException {
         String fullname = request.getParameter("fullname");
         String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
+        String password = request.getParameter("password");
 
         try {
-            int id = service.registerCustomer(fullname, email, phone);
+            int id = service.registerCustomer(fullname, email, password);
+
             if (id > 0) {
                 response.sendRedirect(request.getContextPath() + "/register.jsp?success=true&customerId=" + id);
+            } else if (id == -2) {
+                response.sendRedirect(request.getContextPath() + "/register.jsp?exists=true");
             } else {
                 response.sendRedirect(request.getContextPath() + "/register.jsp?error=true");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/register.jsp?error=true");

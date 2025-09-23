@@ -1,10 +1,11 @@
+com\mybank\servlets\ViewTransactionServlet.class
 com\mybank\model\Transaction.class
 com\mybank\dao\AccountDAO.class
 com\mybank\servlets\RegisterCustomerServlet.class
+com\mybank\servlets\CustomerLoginServlet.class
 com\mybank\dao\CustomerDAO.class
 com\mybank\util\DBConnection.class
 com\mybank\service\TransactionService.class
-com\mybank\servlets\ViewAccountServlet.class
 com\mybank\dao\TransactionDAO.class
 com\mybank\servlets\OpenAccountServlet.class
 com\mybank\service\AccountService.class

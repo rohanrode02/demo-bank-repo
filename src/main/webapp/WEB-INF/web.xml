@@ -22,14 +22,6 @@
         <url-pattern>/OpenAccountServlet</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>TransactionServlet</servlet-name>
-        <servlet-class>com.mybank.servlets.TransactionServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>TransactionServlet</servlet-name>
-        <url-pattern>/TransactionServlet</url-pattern>
-    </servlet-mapping>
 
     <servlet>
         <servlet-name>DBTestServlet</servlet-name>
@@ -40,17 +32,39 @@
         <url-pattern>/DBTestServlet</url-pattern>
     </servlet-mapping>
 
+
     <servlet>
-        <servlet-name>ViewAccountServlet</servlet-name>
-        <servlet-class>com.mybank.servlets.ViewAccountServlet</servlet-class>
+        <servlet-name>CustomerLoginServlet</servlet-name>
+        <servlet-class>com.mybank.servlets.CustomerLoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ViewAccountServlet</servlet-name>
-        <url-pattern>/ViewAccountServlet</url-pattern>
+        <servlet-name>CustomerLoginServlet</servlet-name>
+        <url-pattern>/CustomerLoginServlet</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TransactionServlet</servlet-name>
+        <servlet-class>com.mybank.servlets.TransactionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TransactionServlet</servlet-name>
+        <url-pattern>/TransactionServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+    <servlet-name>ViewTransactionServlet</servlet-name>
+    <servlet-class>com.mybank.servlets.ViewTransactionServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>ViewTransactionServlet</servlet-name>
+    <url-pattern>/ViewTransactionServlet</url-pattern>
+</servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>register.jsp</welcome-file>
     </welcome-file-list>
 
 </web-app>
+

@@ -30,10 +30,16 @@ form {
 }
 
 /* Inputs */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-select {
+form input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+/* Inputs */
+form select{
     width: 90%;
     padding: 10px;
     margin: 8px 0;
@@ -76,6 +82,7 @@ a:hover {
 <h2>Perform Transaction</h2>
 <form action="TransactionServlet" method="post">
     Account Number: <input type="text" name="accountNumber" required><br>
+    Security Pin: <input type="password" name="securityPin" required><br>
     Transaction Type: 
     <select name="transactionType">
         <option value="Deposit">Deposit</option>
@@ -84,6 +91,7 @@ a:hover {
     Amount: <input type="number" name="amount" required><br>
     <input type="submit" value="Submit">
 </form>
-<a href="register.jsp">Register Customer</a> | <a href="accounts.jsp">Open Account</a>
+
+<a href="dashboard.jsp">Home Page</a> | <a href="accountDetails.jsp">Account Details</a>
 </body>
 </html>

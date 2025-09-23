@@ -32,7 +32,7 @@ form {
 /* Inputs */
 input[type="text"],
 input[type="email"],
-input[type="number"],
+input[type="password"],
 select {
     width: 90%;
     padding: 10px;
@@ -76,19 +76,22 @@ a:hover {
 <h2>Register Customer</h2>
 
 <!-- Success / Error message -->
+
 <% if("true".equals(request.getParameter("success"))) { %>
     <p style="color:green;">Customer registered successfully!</p>
 <% } else if("true".equals(request.getParameter("error"))) { %>
     <p style="color:red;">Error occurred. Try again.</p>
+<% } else if("true".equals(request.getParameter("exists"))) { %>
+    <p style="color:red;">User Already Exists for this Email Address!!</p>
 <% } %>
 
 <form action="${pageContext.request.contextPath}/RegisterCustomerServlet" method="post">
     Full Name: <input type="text" name="fullname" required><br>
     Email: <input type="email" name="email" required><br>
-    Phone: <input type="text" name="phone" required><br>
+    Password: <input type="password" name="password" required>
     <input type="submit" value="Register">
 </form>
 
-<a href="accounts.jsp">Open Account</a> | <a href="transactions.jsp">Transactions</a>
+<a href="loginCustomer.jsp">Logins</a>
 </body>
 </html>

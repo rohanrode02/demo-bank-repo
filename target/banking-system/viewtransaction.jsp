@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Open Account</title>
+    <title>View Transaction</title>
     <style>
-        /* General Page Style */
-body {
+        body {
     font-family: Arial, sans-serif;
     background: #f4f7fb;
     margin: 0;
@@ -30,10 +29,16 @@ form {
 }
 
 /* Inputs */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-select {
+form input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+/* Inputs */
+form select{
     width: 90%;
     padding: 10px;
     margin: 8px 0;
@@ -70,20 +75,22 @@ a:hover {
     text-decoration: underline;
 }
 
+.error { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
-<h2>Open Account</h2>
-<form action="OpenAccountServlet" method="post">
-    Customer ID: <input type="text" name="customerId" required><br>
-    Account Type: 
-    <select name="accountType">
-        <option value="Saving">Saving</option>
-        <option value="Current">Current</option>
-    </select><br>
-    Initial Deposit: <input type="number" name="deposit" required><br>
-    <input type="submit" value="Open Account">
+<h2>View Transaction</h2>
+
+<form action="ViewTransactionServlet" method="post">
+    Account Number: <input type="text" name="accountNumber" required><br><br>
+    Security Pin: <input type="password" name="securityPin" required><br><br>
+    <input type="submit" value="View Transactions">
 </form>
-<a href="register.jsp">Register Customer</a> | <a href="transactions.jsp">Transactions</a>
+
+<% if (request.getAttribute("error") != null) { %>
+    <p class="error"><%= request.getAttribute("error") %></p>
+<% } %>
+
+<a href="dashboard.jsp">Home Page</a>
 </body>
 </html>

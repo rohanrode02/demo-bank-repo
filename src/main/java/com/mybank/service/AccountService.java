@@ -2,23 +2,22 @@ package com.mybank.service;
 
 import com.mybank.dao.AccountDAO;
 import com.mybank.model.Account;
-import com.mybank.model.Transaction;
 
-import java.util.List;
+import java.util.Random;
 
 public class AccountService {
-    private AccountDAO accountDAO = new AccountDAO();
+    private AccountDAO dao = new AccountDAO();
 
-    public int openAccount(int customerId, String accountType, double deposit) throws Exception {
-        Account acct = new Account(0, customerId, accountType, deposit);
-        return accountDAO.openAccount(acct); // returns new account id or -1
-    }
+    public String openAccount(Account account) {
+        if (dao.accountExists(account.getEmail(), account.getSecurityPin())) {
+            return "duplicate";
+        }
 
-    public Account getAccount(int accountId) throws Exception {
-        return accountDAO.getAccountById(accountId);
-    }
+        // Account number generate and set
+        String accNumber = "ACC" + (100000 + new Random().nextInt(900000));
+        account.setAccountNumber(accNumber);
 
-    public List<Transaction> getTransactionHistory(int accountId) throws Exception {
-        return accountDAO.getTransactionHistory(accountId);
+        boolean saved = dao.saveAccount(account);
+        return saved ? "success" : "failed";
     }
 }
